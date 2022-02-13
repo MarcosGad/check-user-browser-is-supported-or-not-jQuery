@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Check User Browser Is Supported Or Not In jQuery</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" >	
+</head>
+<body>	
+	<div class="modal fade" id="BrowserModel" tabindex="-1" role="dialog" aria-labelledby="demoModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="demoModalLabel">Warning - Browser not supported !</h5>
+						<button type="button" class="close" data-dismiss="modal" aria- 
+	                    label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+				</div>
+				<div class="modal-body">
+						<b>Your Browser is Not Supported our Website !!</b><br>
+						This is Example of Browser Compatibility.
+				</div>
+				<div class="checkbox modal-body">							
+					<input type="checkbox" name="understand_checkbox" class="styled" value="checked" id="understand_checkbox">  I understand term and condition, but still want to continue.
+				  </div>
+				<div class="modal-footer">
+					<button type="button" value="proceed" id="proceed" name="proceed" data-dismiss="modal" class="btn btn-info" disabled>Proceed</button>		
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    
+    let userAgentString =  navigator.userAgent; 
+    console.log(userAgentString);
+    
+    let chromeAgent =  userAgentString.indexOf("Chrome") > -1; 
+
+    let IExplorerAgent =  userAgentString.indexOf("MSIE") > -1 ||  
+    userAgentString.indexOf("rv:") > -1; 
+  
+    let firefoxAgent =  userAgentString.indexOf("Firefox") > -1; 
+  
+    let safariAgent =  userAgentString.indexOf("Safari") > -1; 
+                
+    if ((chromeAgent) && (safariAgent))  
+        safariAgent = false; 
+        
+    let operaAgent =  userAgentString.indexOf("OP") > -1; 
+          
+    if ((chromeAgent) && (operaAgent))  
+        chromeAgent = false;
+
+    
+    if(chromeAgent || firefoxAgent || safariAgent)
+    {
+      	console.log("chrome: "+chromeAgent);
+      	console.log("firefox: "+firefoxAgent);
+      	console.log("safari: "+safariAgent);
+	  	$("#BrowserModel").modal('hide');
+    }else{
+      	console.log("Default show");
+      	$("#BrowserModel").modal('show');
+    }
+
+    $('#understand_checkbox').click(function(){    
+      if($(this).is(':checked')){        
+          $('#proceed').attr("disabled", false);
+
+          $("#proceed"). click(function(){
+            var str = $("#understand_checkbox").val();
+            if (typeof(Storage) !== "undefined") {
+              var is_browser_checked = str;
+              localStorage.setItem('is_browser_checked', is_browser_checked);
+            }
+          });
+      } else{        
+          $('#proceed').attr("disabled", true);
+      }
+    });   
+    
+    var data = localStorage.getItem('is_browser_checked');
+    if(data == "checked")
+    {
+      $("#BrowserModel").modal('hide');
+    }
+});
+</script>
